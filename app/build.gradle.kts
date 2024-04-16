@@ -1,16 +1,18 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.example.amusegrind"
-    compileSdk = 34
+    compileSdk = rootProject.extra.get("compileSdk") as Int
 
     defaultConfig {
         applicationId = "com.example.amusegrind"
-        minSdk = 28
-        targetSdk = 34
+        minSdk = rootProject.extra.get("minSdk") as Int
+        targetSdk = rootProject.extra.get("targetSdk") as Int
         versionCode = 1
         versionName = "1.0"
 
@@ -40,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.orNull
     }
     packaging {
         resources {
@@ -53,6 +55,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
     implementation(libs.compose.activity)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -63,6 +66,15 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.compose.hilt.navigation)
     implementation(libs.compose.foundation)
+
+// Hilt
+    implementation(libs.hilt.library)
+    implementation(libs.dagger)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.dagger.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(platform(libs.compose.bom))
