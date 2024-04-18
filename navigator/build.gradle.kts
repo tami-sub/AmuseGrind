@@ -1,21 +1,16 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.amusegrind"
+    namespace = "com.example.amusegrind.navigator"
     compileSdk = rootProject.extra.get("compileSdk") as Int
 
     defaultConfig {
-        applicationId = "com.example.amusegrind"
         minSdk = rootProject.extra.get("minSdk") as Int
-        targetSdk = rootProject.extra.get("targetSdk") as Int
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -77,8 +72,6 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     kapt(libs.dagger.compiler)
 
-    implementation(libs.androidx.work.runtime)
-
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -87,8 +80,7 @@ dependencies {
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
 
-    // Modules
-    implementation(project(":core"))
-    implementation(project(":network"))
-    implementation(project(":navigator"))
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
