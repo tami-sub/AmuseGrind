@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.amusegrind.core"
+    namespace = "com.example.amusegrind.network"
     compileSdk = rootProject.extra.get("compileSdk") as Int
 
     defaultConfig {
@@ -79,4 +79,8 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }

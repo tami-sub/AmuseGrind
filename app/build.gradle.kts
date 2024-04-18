@@ -89,4 +89,5 @@ dependencies {
 
     // Modules
     implementation(project(":core"))
+    implementation(project(":network"))
 }

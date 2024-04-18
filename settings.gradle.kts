@@ -22,4 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "AmuseGrind"
 include(":app")
 include(":core")
+include(":network")
  
