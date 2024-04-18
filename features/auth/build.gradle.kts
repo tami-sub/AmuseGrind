@@ -3,11 +3,10 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.example.amusegrind.navigator"
+    namespace = "com.example.amusegrind.auth"
     compileSdk = rootProject.extra.get("compileSdk") as Int
 
     defaultConfig {

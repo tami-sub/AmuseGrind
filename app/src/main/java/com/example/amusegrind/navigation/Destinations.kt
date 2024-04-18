@@ -3,13 +3,12 @@ package com.example.amusegrind.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.amusegrind.network.LoginDestination
-import com.example.amusegrind.network.NavigationDestination
+import com.example.amusegrind.auth.presentation.LoginScreen
+import com.example.amusegrind.navigator.LoginDestination
+import com.example.amusegrind.navigator.NavigationDestination
 
 private val destinations: Map<NavigationDestination, @Composable () -> Unit> =
-    mapOf(
-        LoginDestination to { }
-    )
+    mapOf(LoginDestination to { LoginScreen() })
 
 fun NavGraphBuilder.addComposableDestinations() {
     destinations.forEach { entry ->

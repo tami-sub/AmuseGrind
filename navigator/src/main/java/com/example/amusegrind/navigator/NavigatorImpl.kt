@@ -1,4 +1,4 @@
-package com.example.amusegrind.network
+package com.example.amusegrind.navigator
 
 import androidx.navigation.NavOptionsBuilder
 import kotlinx.coroutines.channels.Channel

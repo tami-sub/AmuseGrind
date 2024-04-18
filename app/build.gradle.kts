@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -91,4 +92,5 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":network"))
     implementation(project(":navigator"))
+    implementation(project(":features:auth"))
 }

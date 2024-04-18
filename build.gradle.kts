@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.hilt) apply false
 }
 
 buildscript {
@@ -15,9 +16,13 @@ buildscript {
         set("targetSdk", 34)
     }
 
+    repositories {
+        google()
+        mavenCentral()
+    }
+
     dependencies {
-        classpath(libs.ktlint.gradle)
-        classpath(libs.hilt.plugin.gradle)
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:12.1.0")
     }
 }
 

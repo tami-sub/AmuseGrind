@@ -12,7 +12,7 @@ compose = "1.6.5"
 compose-compiler = "1.5.7"
 material3 = "1.2.1"
 hilt = "2.46.1"
-hilt-android = "1.0.0"
+hilt-android = "1.2.0"
 retrofitVer = "2.9.0"
 accomponist = "0.32.0"
 workmanager = "2.8.1"
@@ -40,7 +40,6 @@ compose-ui-test-manifest = { module =  "androidx.compose.ui:ui-test-manifest", v
 coil-compose = "io.coil-kt:coil-compose:2.4.0"
 
 # Hilt
-hilt-plugin-gradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-library = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
@@ -52,7 +51,7 @@ hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hilt-android" }
 #Network
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVer" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitVer" }
-converter-gson = { module = "com.squareup.retrofit:converter-gson", version.ref = "retrofitVer" }
+#converter-gson = { module = "com.squareup.retrofit:converter-gson", version.ref = "retrofitVer" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofitVer" }
 moshi = "com.squareup.moshi:moshi-kotlin:1.15.0"
 logging-interceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
@@ -77,7 +76,7 @@ google-services = { id = "com.google.gms.google-services", version = "4.4.1" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "1.9.10" }
 
 # Hilt
-hilt = { id = "dagger.hilt.android.plugin", version.ref = "hilt" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 # Kapt/Ksp
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
