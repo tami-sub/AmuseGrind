@@ -26,25 +26,6 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(LoginState(name = ""))
     val state = _state.asStateFlow()
 
-    fun handleGoogleSignInResult(data: Intent) {
-        viewModelScope.launch {
-            signInWithGoogle.handleSignInResult(data).collect { result ->
-                result.onSuccess { user ->
-                    _state.update {
-                        it.copy(name = user.username.orEmpty())
-                    }
-                    Log.d("joka", "URA")
-                }.onFailure {
-                    Log.d("joka", "F")
-                }
-            }
-        }
-    }
-
     val showLoginScreen: Flow<Boolean> =
         signInWithGoogle.invoke().map { it }
-
-    fun getSignInIntent() = signInWithGoogle.getSignInIntent()
-
-    fun signOut() = signInWithGoogle.signOut()
 }

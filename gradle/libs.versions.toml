@@ -56,7 +56,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitVer" }
 #converter-gson = { module = "com.squareup.retrofit:converter-gson", version = "2.9.0" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofitVer" }
-moshi = "com.squareup.moshi:moshi-kotlin:1.15.0"
+moshi = "com.squareup.moshi:moshi-kotlin:1.15.1"
 logging-interceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
 #Firebase
@@ -70,6 +70,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.4.1" }
 
 #Ktlint
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = "11.3.1" }

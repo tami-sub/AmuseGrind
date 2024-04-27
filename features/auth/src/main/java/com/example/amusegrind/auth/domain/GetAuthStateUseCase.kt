@@ -11,4 +11,3 @@ class GetAuthStateUseCase @Inject constructor() {
         return flowOf(if (Random.nextBoolean()) AuthState.AUTHORIZED else AuthState.NOT_AUTHORIZED)
     }
 }
-

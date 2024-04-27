@@ -11,8 +11,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -46,22 +44,12 @@ class GoogleAuthServiceImpl @Inject constructor(
             val authResult = FirebaseAuth.getInstance().signInWithCredential(credential).await()
             val firebaseUser = authResult.user
             if (firebaseUser != null) {
-                emit(Result.success(User(firebaseUser.uid, firebaseUser.email)))
+                emit(Result.success(User( uid = firebaseUser.uid, username = firebaseUser.displayName)))
             } else {
                 throw FirebaseAuthException("auth/failed", "Firebase Auth failed")
             }
         } catch (e: ApiException) {
             emit(Result.failure(RuntimeException("Failed to complete Google sign-in", e)))
-        }
-    }
-
-    override fun signOut(): Flow<Result<Unit>> = flow {
-        try {
-            googleSignInClient.signOut().await()  // Await the completion of Google sign-out
-            Firebase.auth.signOut() // Firebase sign-out
-            emit(Result.success(Unit))            // Emit success after both sign-outs
-        } catch (e: Exception) {
-            emit(Result.failure(e))         // Emit failure in case of an exception
         }
     }
 

@@ -84,6 +84,7 @@ dependencies {
     kapt(libs.dagger.compiler)
 
     implementation(libs.androidx.work.runtime)
+    implementation(libs.kotlinx.serialization)
 
     // Test
     testImplementation(libs.junit)

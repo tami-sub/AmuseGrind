@@ -30,15 +30,5 @@ class MainActivity : ComponentActivity() {
                 MainScreen(navigator)
             }
         }
-
-        googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { viewModel.handleGoogleSignInResult(it) }
-            }
-        }
-
-        val signInIntent = viewModel.getSignInIntent()
-
-        googleSignInLauncher.launch(signInIntent)
     }
 }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface GoogleAuthService {
     fun getSignInIntent(): Intent
     fun handleSignInResult(data: Intent): Flow<Result<User>>
-    fun signOut(): Flow<Result<Unit>>
 
     fun getAccountInfo(): Flow<Result<User>>
 

@@ -1,6 +1,5 @@
 package com.example.amusegrind.presentation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,6 +16,7 @@ fun MainScreen(navigator: Navigator) {
     val navController = rememberNavController()
     val mainViewModel: MainViewModel = hiltViewModel()
     val showLoginScreen = mainViewModel.showLoginScreen.collectAsState(false)
+
     LaunchedEffect(navController) {
         navigator.destinations.collect {
             when (val event = it) {
@@ -45,7 +45,6 @@ fun MainScreen(navigator: Navigator) {
         }
     }
 
-    Log.d("joka", " HOOH: ${showLoginScreen.value}")
     // В конце вернуть нормальную логику
     NavHost(
         navController = navController,
