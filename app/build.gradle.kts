@@ -70,6 +70,11 @@ dependencies {
     implementation(libs.compose.hilt.navigation)
     implementation(libs.compose.foundation)
 
+    //Firebase
+    implementation(libs.firebase.common.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.analytics)
+
     // Hilt
     implementation(libs.hilt.library)
     implementation(libs.dagger)

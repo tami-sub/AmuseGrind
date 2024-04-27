@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -72,6 +73,11 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     kapt(libs.dagger.compiler)
 
+    //Firebase
+    implementation(libs.firebase.common.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.analytics)
+
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -79,4 +85,8 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    // Modules
+    implementation(project(":network"))
+    implementation(project(":navigator"))
 }

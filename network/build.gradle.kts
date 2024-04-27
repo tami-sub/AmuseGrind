@@ -85,6 +85,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
 
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
 }

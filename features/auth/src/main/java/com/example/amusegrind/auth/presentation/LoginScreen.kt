@@ -14,9 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun LoginScreen() {
+    val viewModel: LoginViewModel = hiltViewModel()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -28,7 +30,7 @@ fun LoginScreen() {
                 .size(100.dp)
                 .background(Color.White, CircleShape)
                 .clickable {
-                    // Handle the Google login action here
+                    viewModel.signOut()
                 },
             contentAlignment = Alignment.Center
         ) {

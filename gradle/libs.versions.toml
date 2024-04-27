@@ -19,6 +19,8 @@ accomponist = "0.32.0"
 workmanager = "2.8.1"
 room = "2.6.1"
 workRuntime = "2.9.0"
+playServicesAuth = "21.0.0"
+firebaseCommonKtx = "21.0.0"
 
 [libraries]
 # Compose:
@@ -52,12 +54,17 @@ hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hilt-android" }
 #Network
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVer" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitVer" }
-#converter-gson = { module = "com.squareup.retrofit:converter-gson", version.ref = "retrofitVer" }
+#converter-gson = { module = "com.squareup.retrofit:converter-gson", version = "2.9.0" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofitVer" }
 moshi = "com.squareup.moshi:moshi-kotlin:1.15.0"
 logging-interceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
+
+#Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
+
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -66,7 +73,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 
 #Ktlint
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = "11.3.1" }
-
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 [plugins]
 
 # Android:
@@ -81,7 +88,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 # Firebase
-google-services = { id = "com.google.gms.google-services", version = "4.4.1" }
+google-services = { id = "com.google.gms.google-services", version = "4.3.4" }
 
 # Kapt/Ksp
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
