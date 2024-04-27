@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.amusegrind.auth.domain.AuthState
 import com.example.amusegrind.navigation.addComposableDestinations
 import com.example.amusegrind.navigator.LoginDestination
 import com.example.amusegrind.navigator.Navigator
@@ -15,8 +16,8 @@ import com.example.amusegrind.navigator.NavigatorEvent
 fun MainScreen(navigator: Navigator) {
     val navController = rememberNavController()
     val mainViewModel: MainViewModel = hiltViewModel()
-    val showLoginScreen = mainViewModel.showLoginScreen.collectAsState(false)
-
+    val state = mainViewModel.state.collectAsState().value
+    mainViewModel.getAuthState()
     LaunchedEffect(navController) {
         navigator.destinations.collect {
             when (val event = it) {
@@ -24,13 +25,15 @@ fun MainScreen(navigator: Navigator) {
                 is NavigatorEvent.NavigateUpTo -> {
                     navController.popBackStack(
                         event.route,
-                        event.inclusive
+                        event.inclusive,
                     )
                 }
+
                 is NavigatorEvent.Directions -> navController.navigate(
                     event.destination,
-                    event.builder
+                    event.builder,
                 )
+
                 is NavigatorEvent.Replace -> navController.navigate(
                     event.route, builder = {
                         navController.currentDestination?.route?.let { currentRoute ->
@@ -38,6 +41,7 @@ fun MainScreen(navigator: Navigator) {
                         }
                     }
                 )
+
                 is NavigatorEvent.ReplaceRoot -> navController.navigate(
                     event.route, builder = { popUpTo(0) { inclusive = true } }
                 )
@@ -48,7 +52,7 @@ fun MainScreen(navigator: Navigator) {
     // В конце вернуть нормальную логику
     NavHost(
         navController = navController,
-        startDestination = if (showLoginScreen.value) LoginDestination.route() else LoginDestination.route(),
+        startDestination = if (state.auth == AuthState.AUTHORIZED) LoginDestination.route() else LoginDestination.route(),
         builder = { addComposableDestinations() }
     )
 }

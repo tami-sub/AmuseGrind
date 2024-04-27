@@ -29,7 +29,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.compose.hilt.navigation)
     implementation(libs.compose.foundation)
 
-    //Firebase
+    // Firebase
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)

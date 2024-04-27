@@ -30,12 +30,10 @@ class GoogleAuthServiceImpl @Inject constructor(
         GoogleSignIn.getClient(context, gso)
     }
 
-    // Method to get the sign-in intent
     override fun getSignInIntent(): Intent {
         return googleSignInClient.signInIntent
     }
 
-    // Method to handle the result from the sign-in intent
     override fun handleSignInResult(data: Intent): Flow<Result<User>> = flow {
         try {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -44,12 +42,29 @@ class GoogleAuthServiceImpl @Inject constructor(
             val authResult = FirebaseAuth.getInstance().signInWithCredential(credential).await()
             val firebaseUser = authResult.user
             if (firebaseUser != null) {
-                emit(Result.success(User( uid = firebaseUser.uid, username = firebaseUser.displayName)))
+                emit(
+                    Result.success(
+                        User(
+                            uid = firebaseUser.uid,
+                            username = firebaseUser.displayName
+                        )
+                    )
+                )
             } else {
-                throw FirebaseAuthException("auth/failed", "Firebase Auth failed")
+                throw FirebaseAuthException(
+                    "auth/failed",
+                    context.getString(R.string.firebase_auth_failed)
+                )
             }
         } catch (e: ApiException) {
-            emit(Result.failure(RuntimeException("Failed to complete Google sign-in", e)))
+            emit(
+                Result.failure(
+                    RuntimeException(
+                        context.getString(R.string.failed_to_complete_google_sign_in),
+                        e
+                    )
+                )
+            )
         }
     }
 

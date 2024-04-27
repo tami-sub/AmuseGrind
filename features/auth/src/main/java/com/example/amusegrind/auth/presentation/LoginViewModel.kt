@@ -4,6 +4,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.amusegrind.auth.domain.AuthState
+import com.example.amusegrind.auth.domain.GetAuthStateUseCase
 import com.example.amusegrind.auth.domain.SignInWithGoogleUseCase
 import com.example.amusegrind.auth.domain.SignOutWithGoogleUseCase
 import com.example.amusegrind.navigator.Navigator
@@ -21,20 +23,24 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     val signInWithGoogle: SignInWithGoogleUseCase,
     val signOutWithGoogleUseCase: SignOutWithGoogleUseCase,
-    val navigator: Navigator,
+    val getAuthStateUseCase: GetAuthStateUseCase,
+    val navigator: Navigator
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(LoginState(name = ""))
+    private val _state = MutableStateFlow(LoginState(auth = AuthState.NOT_AUTHORIZED))
     val state = _state.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            Log.d("joka", getAuthStateUseCase.invoke().first().name)
+        }
+    }
 
     fun handleGoogleSignInResult(data: Intent) {
         viewModelScope.launch {
             signInWithGoogle.handleSignInResult(data).collect { result ->
                 result.onSuccess { user ->
-                    _state.update {
-                        it.copy(name = user.username.orEmpty())
-                    }
-                    Log.d("joka", "URA ${state.value.name}")
+                    Log.d("joka", user.username.toString())
                 }.onFailure {
                     Log.d("joka", "F")
                 }
@@ -47,6 +53,5 @@ class LoginViewModel @Inject constructor(
 
     fun signOut() = viewModelScope.launch {
         signOutWithGoogleUseCase.invoke()
-        Log.d("joka", signInWithGoogle.isUserAuthenticated().first().toString())
     }
 }
