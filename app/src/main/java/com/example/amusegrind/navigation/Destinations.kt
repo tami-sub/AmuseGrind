@@ -6,9 +6,14 @@ import androidx.navigation.compose.composable
 import com.example.amusegrind.auth.presentation.LoginScreen
 import com.example.amusegrind.navigator.LoginDestination
 import com.example.amusegrind.navigator.NavigationDestination
+import com.example.amusegrind.navigator.SettingsDestination
+import com.example.amusegrind.settings.presentation.SettingsScreen
 
 private val destinations: Map<NavigationDestination, @Composable () -> Unit> =
-    mapOf(LoginDestination to { LoginScreen() })
+    mapOf(
+        LoginDestination to { LoginScreen() },
+        SettingsDestination to { SettingsScreen() }
+    )
 
 fun NavGraphBuilder.addComposableDestinations() {
     destinations.forEach { entry ->

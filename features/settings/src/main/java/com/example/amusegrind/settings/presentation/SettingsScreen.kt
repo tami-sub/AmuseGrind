@@ -1,8 +1,5 @@
-package com.example.amusegrind.auth.presentation
+package com.example.amusegrind.settings.presentation
 
-import android.app.Activity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,13 +19,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun LoginScreen() {
-    val viewModel: LoginViewModel = hiltViewModel()
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { viewModel.handleGoogleSignInResult(it) }
-            }
-        }
+fun SettingsScreen() {
+    val viewModel: SettingsViewModel = hiltViewModel()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,12 +34,12 @@ fun LoginScreen() {
                 .background(Color.White, CircleShape)
                 .align(Alignment.CenterHorizontally)
                 .clickable {
-                    launcher.launch(viewModel.getSignInIntent())
+                    viewModel.signOut()
                 },
             contentAlignment = Alignment.Center
         ) {
             Text(
-                "G",
+                "OUT",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Red

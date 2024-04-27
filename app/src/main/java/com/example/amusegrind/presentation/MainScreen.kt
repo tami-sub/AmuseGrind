@@ -11,6 +11,7 @@ import com.example.amusegrind.navigation.addComposableDestinations
 import com.example.amusegrind.navigator.LoginDestination
 import com.example.amusegrind.navigator.Navigator
 import com.example.amusegrind.navigator.NavigatorEvent
+import com.example.amusegrind.navigator.SettingsDestination
 
 @Composable
 fun MainScreen(navigator: Navigator) {
@@ -52,7 +53,7 @@ fun MainScreen(navigator: Navigator) {
     // В конце вернуть нормальную логику
     NavHost(
         navController = navController,
-        startDestination = if (state.auth == AuthState.AUTHORIZED) LoginDestination.route() else LoginDestination.route(),
+        startDestination = if (state.auth == AuthState.AUTHORIZED) SettingsDestination.route() else LoginDestination.route(),
         builder = { addComposableDestinations() }
     )
 }
