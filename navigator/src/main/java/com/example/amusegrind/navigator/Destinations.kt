@@ -9,11 +9,11 @@ object HomeDestination : NavigationDestination {
 }
 
 object RecordAudioDestination : NavigationDestination {
-    override fun route(): String = "recordAudio"
+    override fun route(): String = "record"
 }
 
 object PreviewAudioDestination : NavigationDestination {
-    override fun route(): String = "previewAudio"
+    override fun route(): String = "preview"
 }
 
 object ChatDestination : NavigationDestination {
@@ -21,5 +21,5 @@ object ChatDestination : NavigationDestination {
 }
 
 object SettingsDestination : NavigationDestination {
-    override fun route(): String = "personalInfo"
+    override fun route(): String = "settings"
 }

@@ -12,5 +12,5 @@ interface GoogleAuthService {
 
     fun isUserAuthenticated(): Flow<Boolean>
 
-    fun signOut (): Unit
+    fun signOut ()
 }
