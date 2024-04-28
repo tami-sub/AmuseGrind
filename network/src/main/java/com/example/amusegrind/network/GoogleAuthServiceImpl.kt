@@ -11,8 +11,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -74,21 +77,24 @@ class GoogleAuthServiceImpl @Inject constructor(
         emit(firebaseUser != null && googleAccount != null)
     }
 
+    override fun signOut() {
+        Firebase.auth.signOut()
+        googleSignInClient.signOut()
+    }
+
     override fun getAccountInfo(): Flow<Result<User>> = flow {
-        try {
-            val account = GoogleSignIn.getLastSignedInAccount(context)
-            if (account != null) {
-                val user = User(
-                    uid = account.id ?: "",
-                    username = account.displayName,
-                    profilePictureUrl = account.photoUrl
-                )
-                emit(Result.success(user))
-            } else {
-                emit(Result.failure(RuntimeException("No Google account is currently signed in")))
-            }
-        } catch (e: Exception) {
-            emit(Result.failure(RuntimeException("Failed to retrieve account information", e)))
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        if (account != null) {
+            val user = User(
+                uid = account.id ?: "",
+                username = account.displayName,
+                profilePictureUrl = account.photoUrl
+            )
+            emit(Result.success(user))
+        } else {
+            emit(Result.failure(RuntimeException("No Google account is currently signed in")))
         }
+    }.catch { e ->
+        emit(Result.failure<User>(RuntimeException("Failed to retrieve account information", e)))
     }
 }

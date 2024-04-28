@@ -18,9 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    val signInWithGoogle: SignInWithGoogleUseCase,
-    val getAuthStateUseCase: GetAuthStateUseCase,
-    val navigator: Navigator
+    private val signInWithGoogle: SignInWithGoogleUseCase,
+    private val getAuthStateUseCase: GetAuthStateUseCase,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState(auth = AuthState.NOT_AUTHORIZED))
@@ -29,11 +29,11 @@ class LoginViewModel @Inject constructor(
     fun handleGoogleSignInResult(data: Intent) {
         viewModelScope.launch {
             signInWithGoogle.handleSignInResult(data).collect { result ->
-                result.onSuccess { user ->
-                    Log.d("joka", user.username.toString())
+                result.onSuccess {
+                    Log.d("joka", "Success Log In")
                     navigator.navigate(SettingsDestination.route())
                 }.onFailure {
-
+                    Log.d("joka", "Failed Log In")
                 }
             }
         }

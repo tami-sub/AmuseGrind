@@ -59,6 +59,9 @@ converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", versi
 moshi = "com.squareup.moshi:moshi-kotlin:1.15.1"
 logging-interceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
+#Coil
+coil = "io.coil-kt:coil-compose:2.4.0"
+
 #Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }

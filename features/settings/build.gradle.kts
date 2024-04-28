@@ -73,10 +73,13 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     kapt(libs.dagger.compiler)
 
-    //Firebase
+    // Firebase
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
+
+    // Coil
+    implementation(libs.coil)
 
     // Test
     testImplementation(libs.junit)
@@ -89,4 +92,5 @@ dependencies {
     // Modules
     implementation(project(":network"))
     implementation(project(":navigator"))
+    implementation(project(":core"))
 }

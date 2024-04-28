@@ -21,6 +21,4 @@ class SignInWithGoogleUseCase @Inject constructor(private val googleAuthService:
     operator fun invoke(): Flow<Boolean> {
         return googleAuthService.isUserAuthenticated()
     }
-
-    fun getAccountInfo(): Flow<Result<User>> = googleAuthService.getAccountInfo()
 }
