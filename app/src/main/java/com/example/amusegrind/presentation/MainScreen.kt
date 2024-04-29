@@ -86,7 +86,7 @@ fun MainScreen(navigator: Navigator) {
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (state.auth == AuthState.AUTHORIZED) SettingsDestination.route() else LoginDestination.route(),
+            startDestination = if (state.auth == AuthState.AUTHORIZED) HomeDestination.route() else LoginDestination.route(),
             builder = { addComposableDestinations() }
         )
     }

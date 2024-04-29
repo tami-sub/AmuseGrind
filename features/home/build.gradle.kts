@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.hilt.library)
     implementation(libs.dagger)
     implementation(libs.hilt.work)
+    implementation(libs.androidx.media3.common)
     kapt(libs.hilt.compiler)
     kapt(libs.hilt.android.compiler)
     kapt(libs.dagger.compiler)
@@ -77,6 +78,7 @@ dependencies {
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.database)
 
     // Test
     testImplementation(libs.junit)
@@ -85,6 +87,11 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    // Exoplayer
+    implementation(libs.exoplayer)
+    implementation(libs.exoplayer.dash)
+    implementation(libs.exoplayer.ui)
 
     // Modules
     implementation(project(":network"))
