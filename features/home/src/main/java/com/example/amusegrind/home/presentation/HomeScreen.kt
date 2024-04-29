@@ -16,10 +16,14 @@ import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,12 +54,30 @@ fun HomeScreen() {
 //            }
 //        )
 
+
         state.remoteAudioList?.let {
-            it.forEach { audio ->
-                Log.d("joka", audio.url.toString())
-            }
             VideoPlayer(modifier = Modifier.weight(1f), viewModel, it)
         }
+
+
+
+
+
+
+//        state.remoteAudioList?.let {
+//            it.forEach { audio ->
+//                Log.d("joka", audio.url.toString())
+//            }
+//            VideoPlayer(modifier = Modifier.weight(1f), viewModel, it)
+//        }
+
+
+
+
+
+
+
+
 
 //        Box(
 //            modifier = Modifier
@@ -80,31 +102,49 @@ fun HomeScreen() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun VideoPlayer(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     viewModel: VideoPlayerViewModel,
     remoteAudio: List<RemoteAudio>
 ) {
-    val state = rememberSwipeableState(0)
+    // State to manage current audio index
+    val audioIndex = remember { mutableStateOf(0) }
+    val state = rememberSwipeableState(initialValue = audioIndex.value)
+    val context = LocalContext.current
+
+    // Player instance as remember to not recreate it on recomposition
+    val player = remember {
+        ExoPlayer.Builder(context).build().apply {
+            // Initially set the first audio item
+            setMediaItem(MediaItem.fromUri(remoteAudio[0].url))
+            prepare()
+            playWhenReady = true
+        }
+    }
+
+    // Observe changes in swipe state and update media accordingly
+    LaunchedEffect(state.currentValue) {
+        if (state.currentValue != audioIndex.value) {
+            audioIndex.value = state.currentValue
+            player.setMediaItem(MediaItem.fromUri(remoteAudio[state.currentValue].url))
+            player.prepare()
+            player.playWhenReady = true
+        }
+    }
+
     val size = Modifier
         .fillMaxSize()
         .swipeable(
             state = state,
-            anchors = mapOf(0f to 0, 1f to 1),
+            anchors = remoteAudio.indices
+                .map { it.toFloat() }
+                .associateWith { it.toInt() },
             thresholds = { _, _ -> FractionalThreshold(0.3f) },
             orientation = Orientation.Vertical
         )
 
     AndroidView(
-        factory = { context ->
-            PlayerView(context).apply {
-                player = ExoPlayer.Builder(context).build().also {
-                    it.setMediaItem(MediaItem.fromUri(remoteAudio[0].url))
-                    it.prepare()
-                    it.playWhenReady = true
-                }
-            }
-        },
-        modifier = size
+        factory = { PlayerView(it).apply { this.player = player } },
+        modifier = modifier.then(size)
     )
 }
 
