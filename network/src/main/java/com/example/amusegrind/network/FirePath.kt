@@ -1,6 +1,6 @@
 package com.example.amusegrind.network
 
-import com.example.amusegrind.network.domain.entities.audio.VideoType
+import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -16,7 +16,7 @@ object FirePath {
 
     fun getMyLikedAudios(): String = "users/$myUid/liked-audios"
 
-    fun getUserAudios(uid: String, videoType: VideoType) = "users/$uid/$videoType"
+    fun getUserAudios(uid: String, audioType: AudioType) = "users/$uid/$audioType"
 
     fun getTakenUsernames(userName: String) = "taken-usernames/$userName"
 }

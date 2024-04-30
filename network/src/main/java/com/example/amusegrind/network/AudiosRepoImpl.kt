@@ -1,9 +1,8 @@
 package com.example.amusegrind.network
 
-import android.util.Log
-import com.example.amusegrind.network.data.VideosRepo
+import com.example.amusegrind.network.data.AudiosRepo
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
-import com.example.amusegrind.network.domain.entities.audio.VideoType
+import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -15,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 
-class VideosRepoImpl @Inject constructor() : VideosRepo {
+class AudiosRepoImpl @Inject constructor() : AudiosRepo {
     private val realtimeDataBase = Firebase.database
     private val firePath = FirePath
 
@@ -29,21 +28,19 @@ class VideosRepoImpl @Inject constructor() : VideosRepo {
         }.catch { e -> emit(Result.failure(e)) }
     }
 
-    override suspend fun fetchAudio(audioId: String): Flow<Result<RemoteAudio>> = flow {
+    override suspend fun fetchAudio(audioId: String): Flow<Result<RemoteAudio>> {
         val reference = realtimeDataBase.getReference(firePath.getAllAudiosPath()).child(audioId)
-        flow {
+        return flow {
             val snapshot = reference.get().await()
             val audio = snapshot.getValue<RemoteAudio>() ?: throw Exception("Audio not found")
             emit(Result.success(audio))
         }.catch { e -> emit(Result.failure(e)) }
     }
 
-    override suspend fun isVideoLiked(audioId: String): Flow<Boolean> = flow {
-        // Firebase setup (assuming you have a configured instance)
+    override suspend fun isVideoLiked(audioId: String): Flow<Boolean> {
         val reference = realtimeDataBase.getReference(firePath.getMyLikedAudios()).child(audioId)
 
-        // Fetch data with error handling
-        flow {
+        return flow {
             val snapshot = reference.get().await()
             val isLiked = snapshot.exists()
             emit(isLiked)
@@ -101,14 +98,14 @@ class VideosRepoImpl @Inject constructor() : VideosRepo {
         onComplete: (Boolean) -> Unit
     ) {
         try {
-            val videoType = if (isPrivate) VideoType.PRIVATE else VideoType.PUBLIC
+            val audioType = if (isPrivate) AudioType.PRIVATE else AudioType.PUBLIC
             val remoteAudio =
                 getRemoteAudioFromLocalVideo(videoUrl, descriptionText, duration)
 
             if (!isPrivate) {
                 makeVideoPublic(remoteAudio)
             }
-            saveVideoToMyAccount(videoType, remoteAudio)
+            saveVideoToMyAccount(audioType, remoteAudio)
             onComplete(true)
         } catch (e: Exception) {
             onComplete(false)
@@ -116,11 +113,11 @@ class VideosRepoImpl @Inject constructor() : VideosRepo {
     }
 
     private suspend fun saveVideoToMyAccount(
-        videoType: VideoType,
+        audioType: AudioType,
         remoteAudio: RemoteAudio
     ) {
         realtimeDataBase
-            .getReference(firePath.getUserAudios(Firebase.auth.uid!!, videoType))
+            .getReference(firePath.getUserAudios(Firebase.auth.uid!!, audioType))
             .child(remoteAudio.audioId).setValue(remoteAudio.audioId)
             .await()
     }

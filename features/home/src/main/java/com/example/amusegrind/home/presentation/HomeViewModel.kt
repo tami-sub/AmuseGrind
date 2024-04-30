@@ -1,29 +1,24 @@
 package com.example.amusegrind.home.presentation
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amusegrind.navigator.Navigator
-import com.example.amusegrind.network.data.VideosRepo
-import com.example.amusegrind.network.domain.entities.User
-import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
+import com.example.amusegrind.network.data.AudiosRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class VideoPlayerViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val navigator: Navigator,
-    private val videosRepo: VideosRepo,
+    private val audiosRepo: AudiosRepo,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -40,7 +35,7 @@ class VideoPlayerViewModel @Inject constructor(
 //        if (!isFetching) {
 //            isFetching = true
         viewModelScope.launch {
-            videosRepo.fetchRandomAudios().first().onSuccess { list ->
+            audiosRepo.fetchRandomAudios().first().onSuccess { list ->
                 _state.update { it.copy(remoteAudioList = list) }
                 Log.d("joka", state.value.remoteAudioList.toString())
 //                        isFetching = false
@@ -48,7 +43,7 @@ class VideoPlayerViewModel @Inject constructor(
                 .onFailure {
                     Log.d("joka", "Failed fetch videos")
                 }
-//            videosRepo.fetchRandomAudios().collect { result ->
+//            audiosRepo.fetchRandomAudios().collect { result ->
 //                result.onSuccess { list ->
 //                    _state.update { it.copy(remoteAudioList = list) }
 //                    Log.d("joka", state.value.remoteAudioList.toString())
@@ -60,7 +55,7 @@ class VideoPlayerViewModel @Inject constructor(
 ////                }
 
 
-//                videosRepo.fetchRandomAudios().first().onSuccess {
+//                audiosRepo.fetchRandomAudios().first().onSuccess {
 //                    _state.update { it.copy(remoteAudioList = it.remoteAudioList) }
 //                    Log.d("boka", state.value.remoteAudioList.toString())
 //                    isFetching = false
@@ -82,7 +77,7 @@ class VideoPlayerViewModel @Inject constructor(
 
 //    fun init(remoteAudioId: String) {
 //        viewModelScope.launch {
-//            val remoteAudio = videosRepo(remoteAudioId)
+//            val remoteAudio = audiosRepo(remoteAudioId)
 //            _author.value = userRepo.getUserProfile(remoteAudio.authorUid).tryData()
 //            _likeCount.value = remoteAudio.likes.toInt()
 //            checkIfVideoLiked(remoteAudio.audioId)
@@ -90,7 +85,7 @@ class VideoPlayerViewModel @Inject constructor(
 //    }
 
 //    private suspend fun checkIfVideoLiked(audioId: String) {
-//        val isLiked = videosRepo.isVideoLiked(audioId)
+//        val isLiked = audiosRepo.isVideoLiked(audioId)
 //        _isVideoLiked.value = isLiked.succeeded && isLiked.forceData()
 //    }
 
@@ -100,7 +95,7 @@ class VideoPlayerViewModel @Inject constructor(
 //            _isVideoLiked.value = shouldLike
 //            _likeCount.value = if (shouldLike) _likeCount.value + 1 else _likeCount.value - 1
 //
-//            videosRepo.likeOrUnlikeVideo(
+//            audiosRepo.likeOrUnlikeVideo(
 //                audioId = remoteAudio.audioId,
 //                authorId = remoteAudio.authorUid,
 //                shouldLike = shouldLike

@@ -3,7 +3,7 @@ package com.example.amusegrind.network.data
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import kotlinx.coroutines.flow.Flow
 
-interface VideosRepo {
+interface AudiosRepo {
 
     suspend fun fetchRandomAudios(): Flow<Result<List<RemoteAudio>>>
 

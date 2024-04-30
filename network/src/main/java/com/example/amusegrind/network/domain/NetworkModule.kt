@@ -1,9 +1,9 @@
 package com.example.amusegrind.network.domain
 
 import com.example.amusegrind.network.GoogleAuthServiceImpl
-import com.example.amusegrind.network.VideosRepoImpl
+import com.example.amusegrind.network.AudiosRepoImpl
 import com.example.amusegrind.network.data.GoogleAuthService
-import com.example.amusegrind.network.data.VideosRepo
+import com.example.amusegrind.network.data.AudiosRepo
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,6 +21,6 @@ interface NetworkModule {
 
     @Binds
     fun bindVideosRepo(
-        videosRepoImpl: VideosRepoImpl
-    ): VideosRepo
+        videosRepoImpl: AudiosRepoImpl
+    ): AudiosRepo
 }

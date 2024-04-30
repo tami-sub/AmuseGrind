@@ -1,6 +1,6 @@
 package com.example.amusegrind.network.domain.entities.audio
 
-enum class VideoType {
+enum class AudioType {
     LIKED {
         override fun toString(): String = "liked-audios"
     },
