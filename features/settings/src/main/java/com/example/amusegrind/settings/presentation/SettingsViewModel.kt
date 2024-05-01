@@ -9,7 +9,6 @@ import com.example.amusegrind.network.domain.entities.User
 import com.example.amusegrind.settings.domain.GetAccountInfoUseCase
 import com.example.amusegrind.settings.domain.SignOutWithGoogleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -29,8 +28,10 @@ class SettingsViewModel @Inject constructor(
 
     fun getAccountInfo() = viewModelScope.launch {
         getAccountInfoUseCase.invoke().first().onSuccess { user ->
-            _state.update {
-                it.copy(user = user)
+            user?.let {
+                _state.update {
+                    it.copy(user = user)
+                }
             }
         }.onFailure {
             Log.d("joka", "Failed getAccountInfo")

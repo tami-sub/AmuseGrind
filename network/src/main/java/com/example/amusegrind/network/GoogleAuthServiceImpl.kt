@@ -5,6 +5,7 @@ import android.content.Intent
 import com.example.amusegrind.network.data.GoogleAuthService
 import com.example.amusegrind.network.domain.entities.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -49,7 +50,8 @@ class GoogleAuthServiceImpl @Inject constructor(
                     Result.success(
                         User(
                             uid = firebaseUser.uid,
-                            username = firebaseUser.displayName
+                            username = firebaseUser.displayName,
+                            profilePictureUrl = firebaseUser.photoUrl.toString()
                         )
                     )
                 )
@@ -88,7 +90,7 @@ class GoogleAuthServiceImpl @Inject constructor(
             val user = User(
                 uid = account.id ?: "",
                 username = account.displayName,
-                profilePictureUrl = account.photoUrl
+                profilePictureUrl = account.photoUrl.toString()
             )
             emit(Result.success(user))
         } else {
@@ -97,4 +99,8 @@ class GoogleAuthServiceImpl @Inject constructor(
     }.catch { e ->
         emit(Result.failure<User>(RuntimeException("Failed to retrieve account information", e)))
     }
+
+    override fun getLastSignedInAccount(): GoogleSignInAccount? =
+        GoogleSignIn.getLastSignedInAccount(context)
+
 }

@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
     fun navigateToHome() {
         state.value.currentDestinationRoute?.let {
             if (it != HomeDestination.route()) {
-                navigator.navigate(HomeDestination.route())
+                navigator.replace(HomeDestination.route())
             }
         }
     }
@@ -56,7 +56,7 @@ class MainViewModel @Inject constructor(
     fun navigateToRecordAudio() {
         state.value.currentDestinationRoute?.let {
             if (it != RecordAudioDestination.route()) {
-                navigator.navigate(RecordAudioDestination.route())
+                navigator.replace(RecordAudioDestination.route())
             }
         }
     }
@@ -64,7 +64,7 @@ class MainViewModel @Inject constructor(
     fun navigateToChat() {
         state.value.currentDestinationRoute?.let {
             if (it != ChatDestination.route()) {
-                navigator.navigate(ChatDestination.route())
+                navigator.replace(ChatDestination.route())
             }
         }
     }
@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
     fun navigateToSettings() {
         state.value.currentDestinationRoute?.let {
             if (it != SettingsDestination.route()) {
-                navigator.navigate(SettingsDestination.route())
+                navigator.replace(SettingsDestination.route())
             }
         }
     }

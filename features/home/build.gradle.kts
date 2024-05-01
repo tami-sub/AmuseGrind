@@ -93,6 +93,9 @@ dependencies {
     implementation(libs.exoplayer.dash)
     implementation(libs.exoplayer.ui)
 
+    // Coil
+    implementation(libs.coil)
+
     // Modules
     implementation(project(":network"))
     implementation(project(":navigator"))

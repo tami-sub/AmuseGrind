@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.amusegrind.auth.domain.AuthState
 import com.example.amusegrind.auth.domain.GetAuthStateUseCase
 import com.example.amusegrind.auth.domain.SignInWithGoogleUseCase
+import com.example.amusegrind.navigator.HomeDestination
 import com.example.amusegrind.navigator.Navigator
 import com.example.amusegrind.navigator.SettingsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,14 +29,7 @@ class LoginViewModel @Inject constructor(
 
     fun handleGoogleSignInResult(data: Intent) {
         viewModelScope.launch {
-            signInWithGoogle.handleSignInResult(data).collect { result ->
-                result.onSuccess {
-                    Log.d("joka", "Success Log In")
-                    navigator.navigate(SettingsDestination.route())
-                }.onFailure {
-                    Log.d("joka", "Failed Log In")
-                }
-            }
+            signInWithGoogle.handleSignInResult(data).first()
         }
     }
 

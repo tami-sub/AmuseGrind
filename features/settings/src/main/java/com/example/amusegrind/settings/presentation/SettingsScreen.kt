@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
@@ -21,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.amusegrind.core.ui.AuthButton
@@ -43,11 +42,14 @@ fun SettingsScreen() {
                 .clip(CircleShape)
                 .border(2.dp, Color.Gray, CircleShape)
                 .align(Alignment.CenterHorizontally),
-            painter = rememberAsyncImagePainter(state.value.user.profilePictureUrl),
+            painter = rememberAsyncImagePainter(state.value.user.profilePictureUrl?.toUri()),
             contentDescription = null
         )
         Text(text = state.value.user.username ?: "", Modifier.align(Alignment.CenterHorizontally))
-        Text(text = "Your total likes: ${state.value.user.totalLikes}", Modifier.align(Alignment.CenterHorizontally))
+        Text(
+            text = "Your total likes: ${state.value.user.totalLikes}",
+            Modifier.align(Alignment.CenterHorizontally)
+        )
         Spacer(modifier = Modifier.height(16.dp))
         AuthButton(
             text = stringResource(id = R.string.sign_out),

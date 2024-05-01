@@ -1,11 +1,12 @@
 package com.example.amusegrind.home.presentation
 
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amusegrind.navigator.Navigator
 import com.example.amusegrind.network.data.AudiosRepo
+import com.example.amusegrind.network.data.UserRepo
+import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,87 +20,62 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val navigator: Navigator,
     private val audiosRepo: AudiosRepo,
-    private val savedStateHandle: SavedStateHandle
+    private val userRepo: UserRepo,
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(PlayerState(null))
-    val state: StateFlow<PlayerState> = _state.asStateFlow()
+    private var _state = MutableStateFlow(HomeState(null, null))
+    val state: StateFlow<HomeState> = _state.asStateFlow()
 
 //    private var isFetching = false
 
     init {
         fetchVideos()
     }
-    fun fetchVideos() {
 
-//        if (!isFetching) {
-//            isFetching = true
+    fun getAuthorImageUrl(authorId: String) {
+        viewModelScope.launch {
+            userRepo.getUserProfile(authorId).first().onSuccess { user ->
+                _state.update { it.copy(authorImageUrl = user?.profilePictureUrl) }
+            }
+        }
+    }
+
+    fun fetchVideos() {
         viewModelScope.launch {
             audiosRepo.fetchRandomAudios().first().onSuccess { list ->
                 _state.update { it.copy(remoteAudioList = list) }
-                Log.d("joka", state.value.remoteAudioList.toString())
-//                        isFetching = false
-            }
-                .onFailure {
-                    Log.d("joka", "Failed fetch videos")
-                }
-//            audiosRepo.fetchRandomAudios().collect { result ->
-//                result.onSuccess { list ->
-//                    _state.update { it.copy(remoteAudioList = list) }
-//                    Log.d("joka", state.value.remoteAudioList.toString())
-////                        isFetching = false
-//                }
-//                    .onFailure {
-//                        Log.d("joka", "Failed fetch videos")
-//                    }
-////                }
-
-
-//                audiosRepo.fetchRandomAudios().first().onSuccess {
-//                    _state.update { it.copy(remoteAudioList = it.remoteAudioList) }
-//                    Log.d("boka", state.value.remoteAudioList.toString())
-//                    isFetching = false
-//                }.onFailure {
-//                    Log.d("joka", "Failed fetch videos")
-//                }
+            }.onFailure {
+                Log.d("joka", "Failed fetch videos")
             }
         }
-//    }
+    }
 
-//    private val _author = MutableStateFlow<User?>(null)
-//    val author: StateFlow<User?> = _author.asStateFlow()
-//
-//    private val _likeCount = MutableStateFlow<Int>(0)
-//    val likeCount: StateFlow<Int> = _likeCount.asStateFlow()
-//
-//    private val _isVideoLiked = MutableStateFlow<Boolean>(false)
-//    val isVideoLiked: StateFlow<Boolean> = _isVideoLiked.asStateFlow()
+    fun checkIfAudioLiked(remoteAudio: RemoteAudio) {
+        viewModelScope.launch {
+            val isLiked = audiosRepo.isVideoLiked(remoteAudio.audioId).first()
+            _state.update { it.copy(isLiked = isLiked) }
+        }
+    }
 
-//    fun init(remoteAudioId: String) {
-//        viewModelScope.launch {
-//            val remoteAudio = audiosRepo(remoteAudioId)
-//            _author.value = userRepo.getUserProfile(remoteAudio.authorUid).tryData()
-//            _likeCount.value = remoteAudio.likes.toInt()
-//            checkIfVideoLiked(remoteAudio.audioId)
-//        }
-//    }
+    fun likeOrUnlikeAudio(remoteAudio: RemoteAudio, audioIndex: Int) {
+        viewModelScope.launch {
+            val changedLike = !state.value.isLiked
+            _state.update {
+                it.remoteAudioList?.let { audios ->
+                    val likeCount = audios[audioIndex].likes.toInt()
+                    val newLikeCount = if (changedLike) likeCount + 1 else likeCount - 1
+                    it.remoteAudioList.get(audioIndex).likes = newLikeCount.toLong()
+                }
+                it.copy(
+                    isLiked = changedLike,
+                )
+            }
 
-//    private suspend fun checkIfVideoLiked(audioId: String) {
-//        val isLiked = audiosRepo.isVideoLiked(audioId)
-//        _isVideoLiked.value = isLiked.succeeded && isLiked.forceData()
-//    }
-
-//    fun likeOrUnlikeVideo(remoteAudio: RemoteAudio) {
-//        viewModelScope.launch {
-//            val shouldLike = !_isVideoLiked.value
-//            _isVideoLiked.value = shouldLike
-//            _likeCount.value = if (shouldLike) _likeCount.value + 1 else _likeCount.value - 1
-//
-//            audiosRepo.likeOrUnlikeVideo(
-//                audioId = remoteAudio.audioId,
-//                authorId = remoteAudio.authorUid,
-//                shouldLike = shouldLike
-//            )
-//        }
-//    }
+            audiosRepo.likeOrUnlikeVideo(
+                audioId = remoteAudio.audioId,
+                authorId = remoteAudio.authorUid,
+                shouldLike = changedLike
+            )
+        }
+    }
 }

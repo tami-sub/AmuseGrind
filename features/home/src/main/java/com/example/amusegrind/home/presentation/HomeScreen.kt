@@ -1,133 +1,95 @@
 package com.example.amusegrind.home.presentation
 
-import android.util.Log
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
-import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
-import kotlin.math.roundToInt
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun HomeScreen() {
     val viewModel: HomeViewModel = hiltViewModel()
     val state = viewModel.state.collectAsState().value
 
+    val audioIndex = remember { mutableIntStateOf(0) }
+
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
 
-        state.remoteAudioList?.let {
-            VideoPlayer(modifier = Modifier, viewModel, it)
+        state.remoteAudioList?.let { audiosList ->
+            CustomPlayer(
+                modifier = Modifier,
+                remoteAudioList = audiosList,
+                audioIndex = audioIndex
+            ) {
+                viewModel.getAuthorImageUrl(audiosList[audioIndex.intValue].authorUid)
+            }
+            viewModel.checkIfAudioLiked(audiosList[audioIndex.intValue])
         }
 
         Column(
             modifier = Modifier
-                .padding(bottom = 100.dp, end = 16.dp)
-                .align(Alignment.BottomEnd)
+                .padding(bottom = 150.dp, end = 16.dp)
+                .align(Alignment.BottomEnd),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Likes: ${0}", color = Color.White)
+            Image(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, Color.Gray, CircleShape)
+                    .clickable {
+                        // TODO NavigateToChat
+                    },
+                painter = rememberAsyncImagePainter(state.authorImageUrl?.toUri()),
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+//            Text(text = "Likes: ${0}", color = Color.White)
+            Text(
+                text = "Likes: ${state.remoteAudioList?.get(audioIndex.intValue)?.likes}",
+                color = Color.White
+            )
             IconButton(
-                onClick = { },
-            ) { Icon(Icons.Filled.Favorite, contentDescription = null, tint = Color.White) }
-        }
-    }
-}
-
-@Composable
-fun VideoPlayer(
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel,
-    remoteAudio: List<RemoteAudio>
-) {
-    val audioIndex = remember { mutableStateOf(0) }
-    Log.d("joka", audioIndex.toString())
-    Log.d("joka", remoteAudio.toString())
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    val player = remember {
-        ExoPlayer.Builder(context).build().apply {
-            setMediaItem(MediaItem.fromUri(remoteAudio[audioIndex.value].url))
-            prepare()
-            playWhenReady = true
-        }
-    }
-
-    // Calculate swipe thresholds
-    val screenHeight =
-        LocalConfiguration.current.screenHeightDp / 2  // Replace with actual screen height or any suitable value
-    val maxIndex = remoteAudio.size - 1
-    val scrollState = rememberDraggableState { delta ->
-        val newIndex = ((audioIndex.value * screenHeight - delta) / screenHeight).coerceIn(
-            0F, maxIndex.toFloat()
-        ).roundToInt()
-        if (newIndex != audioIndex.value) {
-            audioIndex.value = newIndex
-            player.setMediaItem(MediaItem.fromUri(remoteAudio[audioIndex.value].url))
-            player.prepare()
-            player.playWhenReady = true
-        }
-        delta
-    }
-
-    val dragModifier = Modifier
-        .fillMaxSize()
-        .draggable(
-            state = scrollState,
-            orientation = Orientation.Vertical,
-            onDragStopped = { /* Handle logic if needed when drag stops */ }
-        )
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
-                player.playWhenReady = false
-                player.release()
-            } else if (event == Lifecycle.Event.ON_START) {
-                player.playWhenReady = true
-                player.prepare()
+                onClick = {
+                    state.remoteAudioList?.let {
+                        viewModel.likeOrUnlikeAudio(it[audioIndex.intValue], audioIndex.intValue)
+                    }
+                },
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = null,
+                    tint = if (state.isLiked) Color.Red else Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
             }
         }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            player.release()
-        }
     }
-
-    AndroidView(
-        factory = { PlayerView(it).apply { this.player = player } },
-        modifier = modifier.then(dragModifier)
-    )
 }
-
-
