@@ -1,22 +1,17 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.example.amusegrind"
+    namespace = "com.example.amusegrind.recorder"
     compileSdk = rootProject.extra.get("compileSdk") as Int
 
     defaultConfig {
-        applicationId = "com.example.amusegrind"
         minSdk = rootProject.extra.get("minSdk") as Int
-        targetSdk = rootProject.extra.get("targetSdk") as Int
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -29,7 +24,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
     }
@@ -70,21 +65,20 @@ dependencies {
     implementation(libs.compose.hilt.navigation)
     implementation(libs.compose.foundation)
 
-    // Firebase
-    implementation(libs.firebase.common.ktx)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.analytics)
-
     // Hilt
     implementation(libs.hilt.library)
     implementation(libs.dagger)
     implementation(libs.hilt.work)
+    implementation(libs.androidx.media3.common)
     kapt(libs.hilt.compiler)
     kapt(libs.hilt.android.compiler)
     kapt(libs.dagger.compiler)
 
-    implementation(libs.androidx.work.runtime)
-    implementation(libs.kotlinx.serialization)
+    //Firebase
+    implementation(libs.firebase.common.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.database)
 
     // Test
     testImplementation(libs.junit)
@@ -94,12 +88,16 @@ dependencies {
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
 
+    // Exoplayer
+    implementation(libs.exoplayer)
+    implementation(libs.exoplayer.dash)
+    implementation(libs.exoplayer.ui)
+
+    // Coil
+    implementation(libs.coil)
+
     // Modules
-    implementation(project(":core"))
     implementation(project(":network"))
     implementation(project(":navigator"))
-    implementation(project(":features:auth"))
-    implementation(project(":features:settings"))
-    implementation(project(":features:home"))
-    implementation(project(":features:recorder"))
+    implementation(project(":core"))
 }

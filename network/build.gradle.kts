@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.hilt.work)
     implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.storage.ktx)
     kapt(libs.hilt.compiler)
     kapt(libs.hilt.android.compiler)
     kapt(libs.dagger.compiler)

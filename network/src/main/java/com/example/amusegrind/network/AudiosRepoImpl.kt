@@ -1,5 +1,6 @@
 package com.example.amusegrind.network
 
+import android.net.Uri
 import com.example.amusegrind.network.data.AudiosRepo
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import com.example.amusegrind.network.domain.entities.audio.AudioType
@@ -7,10 +8,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.io.File
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,6 +22,7 @@ import javax.inject.Singleton
 class AudiosRepoImpl @Inject constructor() : AudiosRepo {
     private val realtimeDataBase = Firebase.database
     private val firePath = FirePath
+    private val fireStorage = Firebase.storage
 
     override suspend fun fetchRandomAudios(): Flow<Result<List<RemoteAudio>>> {
         val reference = realtimeDataBase.getReference(firePath.getAllAudiosPath())
@@ -91,6 +95,14 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
             authorUid = Firebase.auth.uid ?: ""
         )
 
+    override suspend fun uploadAudio(localAudioUri: String): Flow<Result<Uri>> {
+        val storageRefer = fireStorage.getReference("${FirePath.getAllAudiosPath()}/${Firebase.auth.uid}/${UUID.randomUUID()}")
+        val uploadTask = storageRefer.putFile(Uri.fromFile(File(localAudioUri))).await()
+
+        return flow{
+            uploadTask.storage.downloadUrl.await()
+        }
+    }
 
     override suspend fun saveVideoToFireDB(
         isPrivate: Boolean,

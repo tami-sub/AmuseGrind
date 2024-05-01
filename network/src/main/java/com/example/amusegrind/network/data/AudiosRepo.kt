@@ -1,5 +1,6 @@
 package com.example.amusegrind.network.data
 
+import android.net.Uri
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import kotlinx.coroutines.flow.Flow
 
@@ -20,4 +21,6 @@ interface AudiosRepo {
         duration: Long?,
         onComplete: (Boolean) -> Unit
     )
+
+    suspend fun uploadAudio(localAudioUri: String): Flow<Result<Uri>>
 }
