@@ -23,14 +23,15 @@ fun AuthButton(text: String, modifier: Modifier = Modifier, click: () -> Unit) {
             .background(Color.White, CircleShape)
             .clickable {
                 click()
-            }.composed { modifier },
-        contentAlignment = Alignment.Center
+            }
+            .composed { modifier },
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = text,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Red
+            color = Color.Red,
         )
     }
 }

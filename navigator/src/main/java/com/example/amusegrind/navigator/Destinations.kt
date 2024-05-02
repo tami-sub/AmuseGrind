@@ -8,8 +8,8 @@ object HomeDestination : NavigationDestination {
     override fun route(): String = "home"
 }
 
-object RecordAudioDestination : NavigationDestination {
-    override fun route(): String = "record"
+object RecorderDestination : NavigationDestination {
+    override fun route(): String = "recorder"
 }
 
 object PreviewAudioDestination : NavigationDestination {

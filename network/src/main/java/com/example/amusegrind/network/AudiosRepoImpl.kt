@@ -1,6 +1,7 @@
 package com.example.amusegrind.network
 
 import android.net.Uri
+import android.util.Log
 import com.example.amusegrind.network.data.AudiosRepo
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import com.example.amusegrind.network.domain.entities.audio.AudioType
@@ -96,12 +97,13 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
         )
 
     override suspend fun uploadAudio(localAudioUri: String): Flow<Result<Uri>> {
-        val storageRefer = fireStorage.getReference("${FirePath.getAllAudiosPath()}/${Firebase.auth.uid}/${UUID.randomUUID()}")
-        val uploadTask = storageRefer.putFile(Uri.fromFile(File(localAudioUri))).await()
-
-        return flow{
-            uploadTask.storage.downloadUrl.await()
-        }
+        val storageRefer =
+            fireStorage.getReference("${FirePath.getAllAudiosPath()}/${Firebase.auth.uid}/${UUID.randomUUID()}")
+        return flow {
+            val uploadTask = storageRefer.putFile(Uri.fromFile(File(localAudioUri))).await()
+            val url = uploadTask.storage.downloadUrl.await()
+            emit(Result.success(url))
+        }.catch { e -> emit(Result.failure(e)) }
     }
 
     override suspend fun saveVideoToFireDB(

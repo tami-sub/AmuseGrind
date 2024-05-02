@@ -8,7 +8,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class NavigatorModule {
-
     @Binds
     abstract fun navigator(navigator: NavigatorImpl): Navigator
 }

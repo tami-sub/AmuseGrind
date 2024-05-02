@@ -96,6 +96,9 @@ dependencies {
     // Coil
     implementation(libs.coil)
 
+    // FFMPEG
+    implementation("com.arthenica:mobile-ffmpeg-full:4.4.LTS")
+
     // Modules
     implementation(project(":network"))
     implementation(project(":navigator"))

@@ -8,14 +8,17 @@ import com.example.amusegrind.home.presentation.HomeScreen
 import com.example.amusegrind.navigator.HomeDestination
 import com.example.amusegrind.navigator.LoginDestination
 import com.example.amusegrind.navigator.NavigationDestination
+import com.example.amusegrind.navigator.RecorderDestination
 import com.example.amusegrind.navigator.SettingsDestination
+import com.example.amusegrind.recorder.presentation.RecorderScreen
 import com.example.amusegrind.settings.presentation.SettingsScreen
 
 private val destinations: Map<NavigationDestination, @Composable () -> Unit> =
     mapOf(
         LoginDestination to { LoginScreen() },
         SettingsDestination to { SettingsScreen() },
-        HomeDestination to { HomeScreen()}
+        HomeDestination to { HomeScreen() },
+        RecorderDestination to { RecorderScreen() },
     )
 
 fun NavGraphBuilder.addComposableDestinations() {

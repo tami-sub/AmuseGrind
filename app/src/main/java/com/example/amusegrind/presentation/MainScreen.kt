@@ -1,7 +1,6 @@
 package com.example.amusegrind.presentation
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
@@ -13,7 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,7 +24,7 @@ import com.example.amusegrind.navigator.HomeDestination
 import com.example.amusegrind.navigator.LoginDestination
 import com.example.amusegrind.navigator.Navigator
 import com.example.amusegrind.navigator.NavigatorEvent
-import com.example.amusegrind.navigator.RecordAudioDestination
+import com.example.amusegrind.navigator.RecorderDestination
 import com.example.amusegrind.navigator.SettingsDestination
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -58,18 +56,24 @@ fun MainScreen(navigator: Navigator) {
 
                 is NavigatorEvent.Replace -> {
                     navController.navigate(
-                        event.route, builder = {
+                        event.route,
+                        builder = {
                             navController.currentDestination?.route?.let { currentRoute ->
                                 popUpTo(currentRoute) { inclusive = true }
                             }
-                        }
+                        },
                     )
                     mainViewModel.saveCurrentDestination(event.route)
                 }
 
                 is NavigatorEvent.ReplaceRoot -> {
                     navController.navigate(
-                        event.route, builder = { popUpTo(0) { inclusive = true } }
+                        event.route,
+                        builder = {
+                            popUpTo(0) {
+                                inclusive = true
+                            }
+                        },
                     )
                     mainViewModel.saveCurrentDestination(event.route)
                 }
@@ -82,12 +86,12 @@ fun MainScreen(navigator: Navigator) {
             if (state.auth == AuthState.AUTHORIZED) {
                 BottomNavigationBar(mainViewModel, state)
             }
-        }
+        },
     ) {
         NavHost(
             navController = navController,
             startDestination = if (state.auth == AuthState.AUTHORIZED) HomeDestination.route() else LoginDestination.route(),
-            builder = { addComposableDestinations() }
+            builder = { addComposableDestinations() },
         )
     }
 }
@@ -114,14 +118,14 @@ fun BottomNavigationBar(mainViewModel: MainViewModel, state: MainState) {
             icon = {
                 Icon(
                     Icons.Default.Add, contentDescription = null,
-                    tint = if (currentRoute == RecordAudioDestination.route()) {
+                    tint = if (currentRoute == RecorderDestination.route()) {
                         Color.White
                     } else {
                         Color.Black
                     }
                 )
             },
-            selected = currentRoute == RecordAudioDestination.route(),
+            selected = currentRoute == RecorderDestination.route(),
             onClick = { mainViewModel.navigateToRecordAudio() }
         )
         BottomNavigationItem(
@@ -132,11 +136,11 @@ fun BottomNavigationBar(mainViewModel: MainViewModel, state: MainState) {
                         Color.White
                     } else {
                         Color.Black
-                    }
+                    },
                 )
             },
             selected = currentRoute == ChatDestination.route(),
-            onClick = { mainViewModel.navigateToChat() }
+            onClick = { mainViewModel.navigateToChat() },
         )
         BottomNavigationItem(
             icon = {
@@ -147,11 +151,11 @@ fun BottomNavigationBar(mainViewModel: MainViewModel, state: MainState) {
                         Color.White
                     } else {
                         Color.Black
-                    }
+                    },
                 )
             },
             selected = currentRoute == SettingsDestination.route(),
-            onClick = { mainViewModel.navigateToSettings() }
+            onClick = { mainViewModel.navigateToSettings() },
         )
     }
 }

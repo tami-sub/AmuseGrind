@@ -26,8 +26,6 @@ class HomeViewModel @Inject constructor(
     private var _state = MutableStateFlow(HomeState(null, null))
     val state: StateFlow<HomeState> = _state.asStateFlow()
 
-//    private var isFetching = false
-
     init {
         fetchVideos()
     }

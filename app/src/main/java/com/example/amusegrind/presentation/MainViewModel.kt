@@ -1,6 +1,5 @@
 package com.example.amusegrind.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amusegrind.auth.domain.AuthState
@@ -8,7 +7,7 @@ import com.example.amusegrind.auth.domain.GetAuthStateUseCase
 import com.example.amusegrind.navigator.ChatDestination
 import com.example.amusegrind.navigator.HomeDestination
 import com.example.amusegrind.navigator.Navigator
-import com.example.amusegrind.navigator.RecordAudioDestination
+import com.example.amusegrind.navigator.RecorderDestination
 import com.example.amusegrind.navigator.SettingsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,8 +54,8 @@ class MainViewModel @Inject constructor(
 
     fun navigateToRecordAudio() {
         state.value.currentDestinationRoute?.let {
-            if (it != RecordAudioDestination.route()) {
-                navigator.replace(RecordAudioDestination.route())
+            if (it != RecorderDestination.route()) {
+                navigator.replace(RecorderDestination.route())
             }
         }
     }
