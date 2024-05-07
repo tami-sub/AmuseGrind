@@ -1,7 +1,7 @@
 package com.example.amusegrind.network.data
 
 import android.content.Intent
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.coroutines.flow.Flow
 

@@ -3,7 +3,7 @@ package com.example.amusegrind.network
 import android.content.Context
 import android.content.Intent
 import com.example.amusegrind.network.data.GoogleAuthService
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

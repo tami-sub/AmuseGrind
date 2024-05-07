@@ -1,10 +1,10 @@
 package com.example.amusegrind.network
 
 import android.net.Uri
-import android.util.Log
 import com.example.amusegrind.network.data.AudiosRepo
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import com.example.amusegrind.network.domain.entities.audio.AudioType
+import com.example.amusegrind.network.utils.FirePath
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue

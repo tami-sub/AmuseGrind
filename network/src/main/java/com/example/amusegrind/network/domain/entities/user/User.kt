@@ -1,4 +1,4 @@
-package com.example.amusegrind.network.domain.entities
+package com.example.amusegrind.network.domain.entities.user
 
 data class User(
     val uid: String? = null,

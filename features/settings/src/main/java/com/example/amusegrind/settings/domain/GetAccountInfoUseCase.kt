@@ -1,7 +1,7 @@
 package com.example.amusegrind.settings.domain
 
 import com.example.amusegrind.network.data.UserRepo
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow

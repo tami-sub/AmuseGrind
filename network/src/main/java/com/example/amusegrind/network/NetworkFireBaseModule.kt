@@ -10,9 +10,8 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NetworkModule {
-    //    @Provides
-//    fun provideUserRepository(apiService: ApiService): UserRepository = UserRetrofitRepository(apiService)
+interface NetworkFireBaseModule {
+
     @Binds
     fun bindGoogleAuthService(
         googleAuthServiceImpl: GoogleAuthServiceImpl

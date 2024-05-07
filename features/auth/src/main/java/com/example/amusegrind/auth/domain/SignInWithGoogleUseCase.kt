@@ -5,7 +5,7 @@ import com.example.amusegrind.navigator.HomeDestination
 import com.example.amusegrind.navigator.Navigator
 import com.example.amusegrind.network.data.GoogleAuthService
 import com.example.amusegrind.network.data.UserRepo
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow

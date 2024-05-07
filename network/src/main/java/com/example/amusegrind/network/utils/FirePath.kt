@@ -1,4 +1,4 @@
-package com.example.amusegrind.network
+package com.example.amusegrind.network.utils
 
 import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.google.firebase.auth.ktx.auth

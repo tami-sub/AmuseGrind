@@ -96,8 +96,15 @@ dependencies {
     // Coil
     implementation(libs.coil)
 
+    // Retrofit2
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit.kotlin.coroutines.adapter)
+    implementation(libs.okhttp)
+
     // FFMPEG
-    implementation("com.arthenica:mobile-ffmpeg-full:4.4.LTS")
+    implementation(libs.ffmpeg)
 
     // Modules
     implementation(project(":network"))

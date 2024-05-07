@@ -79,4 +79,10 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    // Retrofit2
+    implementation(libs.retrofit)
+
+    // FFMPEG
+    implementation(libs.ffmpeg)
 }

@@ -1,10 +1,8 @@
 package com.example.amusegrind.network.data
 
-import android.net.Uri
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
-import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepo {

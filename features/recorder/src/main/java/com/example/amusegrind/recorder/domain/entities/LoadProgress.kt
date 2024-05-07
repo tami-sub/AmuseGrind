@@ -1,4 +1,4 @@
-package com.example.amusegrind.recorder.domain
+package com.example.amusegrind.recorder.domain.entities
 
 enum class LoadProgress {
     DONE,

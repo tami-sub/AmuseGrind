@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.amusegrind.navigator.LoginDestination
 import com.example.amusegrind.navigator.Navigator
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import com.example.amusegrind.settings.domain.GetAccountInfoUseCase
 import com.example.amusegrind.settings.domain.SignOutWithGoogleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

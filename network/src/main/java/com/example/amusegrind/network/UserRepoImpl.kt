@@ -1,10 +1,10 @@
 package com.example.amusegrind.network
 
-import android.util.Log
 import com.example.amusegrind.network.data.UserRepo
-import com.example.amusegrind.network.domain.entities.User
+import com.example.amusegrind.network.domain.entities.user.User
 import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
+import com.example.amusegrind.network.utils.FirePath
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase

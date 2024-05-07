@@ -85,11 +85,18 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit.kotlin.coroutines.adapter)
+    implementation(libs.okhttp)
+    implementation(libs.converter.gson)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+
+    // Core
+    implementation(project(":core"))
 }
