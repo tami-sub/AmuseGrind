@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface YandexSpeechKitService {
-    @Headers("Authorization: Api-Key AQVN0RAr8AeUyRLxCMfAwZ5I8OjinPEHvJe9MMVW")
+    @Headers("Authorization: Api-Key api_key")
     @POST(Constants.yandexSpeechKitFullUrl)
     suspend fun recognizeSpeech(
         @Query("lang") language: String,
