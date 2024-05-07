@@ -3,6 +3,7 @@ package com.example.amusegrind.network.domain.entities.audio
 data class RemoteAudio(
     var url: String = "",
     var description: String? = null,
+    val image: String? = null,
     var duration: Long = -1,
     var audioId: String ="",
     var dateCreated: Long = -1,

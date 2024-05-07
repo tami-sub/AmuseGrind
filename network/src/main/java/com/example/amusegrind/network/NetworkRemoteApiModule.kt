@@ -1,6 +1,7 @@
 package com.example.amusegrind.network
 
 import com.example.amusegrind.core.utils.Constants
+import com.example.amusegrind.network.data.ImageApiService
 import com.example.amusegrind.network.data.YandexSpeechKitService
 import com.example.amusegrind.network.utils.ResultCallAdapterFactory
 import dagger.Module
@@ -24,5 +25,17 @@ class NetworkRemoteApiModule {
             .build()
 
         return retrofit.create(YandexSpeechKitService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesImageApiServiceRetrofitBuilder() : ImageApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Constants.imageApiBaseUrl)
+            .addCallAdapterFactory(ResultCallAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(ImageApiService::class.java)
     }
 }

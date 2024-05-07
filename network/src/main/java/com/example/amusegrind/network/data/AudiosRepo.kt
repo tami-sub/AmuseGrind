@@ -18,6 +18,7 @@ interface AudiosRepo {
         isPrivate: Boolean,
         videoUrl: String,
         descriptionText: String,
+        image: String,
         duration: Long?,
         onComplete: (Boolean) -> Unit
     )

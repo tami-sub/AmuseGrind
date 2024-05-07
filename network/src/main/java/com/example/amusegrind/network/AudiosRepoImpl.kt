@@ -1,6 +1,7 @@
 package com.example.amusegrind.network
 
 import android.net.Uri
+import android.util.Log
 import com.example.amusegrind.network.data.AudiosRepo
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import com.example.amusegrind.network.domain.entities.audio.AudioType
@@ -83,11 +84,13 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
     private fun getRemoteAudioFromLocalVideo(
         videoUrl: String,
         descriptionText: String,
-        duration: Long?
+        duration: Long?,
+        image: String
     ) =
         RemoteAudio(
             url = videoUrl,
             description = descriptionText,
+            image = image,
             duration = duration ?: 0,
             audioId = UUID.randomUUID().toString(),
             dateCreated = System.currentTimeMillis(),
@@ -103,20 +106,23 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
             val uploadTask = storageRefer.putFile(Uri.fromFile(File(localAudioUri))).await()
             val url = uploadTask.storage.downloadUrl.await()
             emit(Result.success(url))
-        }.catch { e -> emit(Result.failure(e)) }
+        }.catch { e ->
+            Log.d("joka", e.message.toString())
+            emit(Result.failure(e)) }
     }
 
     override suspend fun saveVideoToFireDB(
         isPrivate: Boolean,
         videoUrl: String,
         descriptionText: String,
+        image: String,
         duration: Long?,
         onComplete: (Boolean) -> Unit
     ) {
         try {
             val audioType = if (isPrivate) AudioType.PRIVATE else AudioType.PUBLIC
             val remoteAudio =
-                getRemoteAudioFromLocalVideo(videoUrl, descriptionText, duration)
+                getRemoteAudioFromLocalVideo(videoUrl = videoUrl, descriptionText = descriptionText, image = image, duration = duration)
 
             if (!isPrivate) {
                 makeVideoPublic(remoteAudio)
