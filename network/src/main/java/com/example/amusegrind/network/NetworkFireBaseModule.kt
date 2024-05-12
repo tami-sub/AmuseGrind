@@ -3,6 +3,7 @@ package com.example.amusegrind.network
 import com.example.amusegrind.network.data.AudiosRepo
 import com.example.amusegrind.network.data.GoogleAuthService
 import com.example.amusegrind.network.data.UserRepo
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -7,9 +7,11 @@ import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
 import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.example.amusegrind.network.utils.FirePath
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -21,13 +23,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AudiosRepoImpl @Inject constructor() : AudiosRepo {
-    private val realtimeDataBase = Firebase.database
-    private val firePath = FirePath
-    private val fireStorage = Firebase.storage
+class AudiosRepoImpl @Inject constructor(
+    private val realtimeDataBase: FirebaseDatabase,
+    private val fireStorage: FirebaseStorage
+) : AudiosRepo {
 
     override suspend fun fetchRandomAudios(): Flow<Result<List<RemoteAudio>>> {
-        val reference = realtimeDataBase.getReference(firePath.getAllAudiosPath())
+        val reference = realtimeDataBase.getReference(FirePath.getAllAudiosPath())
         val snapshot = reference.get().await().getValue<Map<String, RemoteAudio>>()!!
         val audioList = snapshot.values.toList()
 
@@ -37,7 +39,7 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
     }
 
     override suspend fun fetchAudio(audioId: String): Flow<Result<RemoteAudio>> {
-        val reference = realtimeDataBase.getReference(firePath.getAllAudiosPath()).child(audioId)
+        val reference = realtimeDataBase.getReference(FirePath.getAllAudiosPath()).child(audioId)
         return flow {
             val snapshot = reference.get().await()
             val audio = snapshot.getValue<RemoteAudio>() ?: throw Exception("Audio not found")
@@ -46,7 +48,7 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
     }
 
     override suspend fun isVideoLiked(audioId: String): Flow<Boolean> {
-        val reference = realtimeDataBase.getReference(firePath.getMyLikedAudios()).child(audioId)
+        val reference = realtimeDataBase.getReference(FirePath.getMyLikedAudios()).child(audioId)
 
         return flow {
             val snapshot = reference.get().await()
@@ -57,16 +59,16 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
 
     override suspend fun likeOrUnlikeVideo(audioId: String, authorId: String, shouldLike: Boolean) {
         val myLikedVideos = realtimeDataBase
-            .getReference(firePath.getMyLikedAudios())
+            .getReference(FirePath.getMyLikedAudios())
             .child(audioId)
 
         val videoRef = realtimeDataBase
-            .getReference(firePath.getAllAudiosPath())
+            .getReference(FirePath.getAllAudiosPath())
             .child(audioId)
             .child("likes")
 
         val authorTotalLikesCountRef = realtimeDataBase
-            .getReference(firePath.getUserInfo(authorId))
+            .getReference(FirePath.getUserInfo(authorId))
             .child("totalLikes")
 
 
@@ -139,7 +141,7 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
         remoteAudio: RemoteAudio
     ) {
         realtimeDataBase
-            .getReference(firePath.getUserAudios(Firebase.auth.uid!!, audioType))
+            .getReference(FirePath.getUserAudios(Firebase.auth.uid!!, audioType))
             .child(remoteAudio.audioId).setValue(remoteAudio.audioId)
             .await()
     }
@@ -148,7 +150,7 @@ class AudiosRepoImpl @Inject constructor() : AudiosRepo {
         remoteAudio: RemoteAudio
     ) {
         realtimeDataBase
-            .getReference(firePath.getAllAudiosPath())
+            .getReference(FirePath.getAllAudiosPath())
             .child(remoteAudio.audioId).setValue(remoteAudio)
             .await()
     }

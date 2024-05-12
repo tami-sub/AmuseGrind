@@ -12,11 +12,15 @@ object FirePath {
     fun getUserInfo(uid: String = myUid): String =
         "users/$uid/basic-data"
 
+    fun getAllUsersPath() = "users"
+
+    fun getAllUserBasicDataPath() = "basic-data"
+
     fun getAllAudiosPath(): String = "audios"
 
     fun getMyLikedAudios(): String = "users/$myUid/liked-audios"
 
     fun getUserAudios(uid: String, audioType: AudioType) = "users/$uid/$audioType"
 
-    fun getTakenUsernames(userName: String) = "taken-usernames/$userName"
+    fun getMessagesPath() = "messages"
 }

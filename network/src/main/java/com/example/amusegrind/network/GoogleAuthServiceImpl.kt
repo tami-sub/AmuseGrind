@@ -22,7 +22,8 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class GoogleAuthServiceImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val firebaseAuth: FirebaseAuth
 ) : GoogleAuthService {
 
     private val googleSignInClient: GoogleSignInClient by lazy {
@@ -43,7 +44,7 @@ class GoogleAuthServiceImpl @Inject constructor(
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val account = task.getResult(ApiException::class.java)!!
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            val authResult = FirebaseAuth.getInstance().signInWithCredential(credential).await()
+            val authResult = firebaseAuth.signInWithCredential(credential).await()
             val firebaseUser = authResult.user
             if (firebaseUser != null) {
                 emit(
@@ -74,13 +75,13 @@ class GoogleAuthServiceImpl @Inject constructor(
     }
 
     override fun isUserAuthenticated(): Flow<Boolean> = flow {
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val firebaseUser = firebaseAuth.currentUser
         val googleAccount = GoogleSignIn.getLastSignedInAccount(context)
         emit(firebaseUser != null && googleAccount != null)
     }
 
     override fun signOut() {
-        Firebase.auth.signOut()
+        firebaseAuth.signOut()
         googleSignInClient.signOut()
     }
 

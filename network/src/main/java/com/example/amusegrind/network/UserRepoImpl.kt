@@ -1,14 +1,13 @@
 package com.example.amusegrind.network
 
 import com.example.amusegrind.network.data.UserRepo
-import com.example.amusegrind.network.domain.entities.user.User
 import com.example.amusegrind.network.domain.entities.audio.AudioType
 import com.example.amusegrind.network.domain.entities.audio.RemoteAudio
+import com.example.amusegrind.network.domain.entities.user.User
 import com.example.amusegrind.network.utils.FirePath
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
@@ -20,15 +19,15 @@ import javax.inject.Singleton
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 @Singleton
-class UserRepoImpl @Inject constructor() : UserRepo {
-    private val fireAuth: FirebaseAuth = Firebase.auth
-    private val firePath: FirePath = FirePath
-    private val realtimeDatabase: FirebaseDatabase = Firebase.database
+class UserRepoImpl @Inject constructor(
+    private val realtimeDatabase: FirebaseDatabase,
+    private val fireAuth: FirebaseAuth
+) : UserRepo {
 
     override fun doesDeviceHaveAnAccount() = fireAuth.currentUser != null
 
     override suspend fun getUserProfile(uid: String?): Flow<Result<User?>> = flow {
-        val userRef = realtimeDatabase.getReference(firePath.getUserInfo(uid ?: ""))
+        val userRef = realtimeDatabase.getReference(FirePath.getUserInfo(uid ?: ""))
         val snapshot = userRef.get().await()
         val user = snapshot.getValue<User>() ?: throw NoSuchElementException("User not found")
         emit(Result.success(user))
@@ -37,7 +36,7 @@ class UserRepoImpl @Inject constructor() : UserRepo {
     }
 
     override suspend fun isUserInRealtimeDatabase(uid: String): Flow<Boolean> = flow<Boolean> {
-        realtimeDatabase.getReference(firePath.getUserInfo(uid)).get().await().getValue<User>()
+        realtimeDatabase.getReference(FirePath.getUserInfo(uid)).get().await().getValue<User>()
             ?: throw NoSuchElementException("User not found")
         emit(true)
     }.catch {
@@ -48,7 +47,7 @@ class UserRepoImpl @Inject constructor() : UserRepo {
         user: User,
     ) {
         realtimeDatabase
-            .getReference(firePath.getUserInfo(Firebase.auth.uid ?: ""))
+            .getReference(FirePath.getUserInfo(Firebase.auth.uid ?: ""))
             .setValue(user)
             .await()
     }
@@ -58,14 +57,14 @@ class UserRepoImpl @Inject constructor() : UserRepo {
         audioType: AudioType
     ): Flow<Result<List<RemoteAudio?>>> {
         val listOfUseraudioId = realtimeDatabase
-            .getReference(firePath.getUserAudios(uid ?: "", audioType))
+            .getReference(FirePath.getUserAudios(uid ?: "", audioType))
             .get()
             .await()
             .getValue<Map<String, String>>()
             ?.values
             ?.toList() ?: listOf()
 
-        val allAudios = realtimeDatabase.getReference(firePath.getAllAudiosPath())
+        val allAudios = realtimeDatabase.getReference(FirePath.getAllAudiosPath())
         return flow {
             emit(Result.success(listOfUseraudioId.map { audioId ->
                 allAudios.child(audioId).get().await().getValue<RemoteAudio>()
