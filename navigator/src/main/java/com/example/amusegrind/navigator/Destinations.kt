@@ -12,10 +12,6 @@ object RecorderDestination : NavigationDestination {
     override fun route(): String = "recorder"
 }
 
-object PreviewAudioDestination : NavigationDestination {
-    override fun route(): String = "preview"
-}
-
 object ChatDestination : NavigationDestination {
     override fun route(): String = "chat"
 }

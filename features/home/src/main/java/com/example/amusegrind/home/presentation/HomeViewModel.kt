@@ -40,11 +40,14 @@ class HomeViewModel @Inject constructor(
 
     fun fetchVideos() {
         viewModelScope.launch {
-            audiosRepo.fetchRandomAudios().first().onSuccess { list ->
-                _state.update { it.copy(remoteAudioList = list) }
-            }.onFailure {
-                Log.d("joka", "Failed fetch videos")
+            try {
+                audiosRepo.fetchRandomAudios().first().onSuccess { list ->
+                    _state.update { it.copy(remoteAudioList = list) }
+                }.onFailure {
+                    Log.d("joka", "Failed fetch videos")
+                }
             }
+            catch (e: Exception){}
         }
     }
 

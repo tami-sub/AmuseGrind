@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,10 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.amusegrind.core.utils.FileHelper.toImageBitmap
 
 @Composable
 fun HomeScreen() {
@@ -52,6 +56,20 @@ fun HomeScreen() {
             viewModel.checkIfAudioLiked(audiosList[audioIndex.intValue])
         }
 
+        state.remoteAudioList?.get(audioIndex.intValue)?.image?.toImageBitmap()?.let { image->
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp)
+                    .padding(top = 50.dp)
+                    .clickable {
+                        // TODO what?
+                    },
+                painter = BitmapPainter(image = image),
+                contentDescription = null
+            )
+        }
+
         Column(
             modifier = Modifier
                 .padding(bottom = 150.dp, end = 16.dp)
@@ -71,7 +89,6 @@ fun HomeScreen() {
                 contentDescription = null
             )
             Spacer(modifier = Modifier.height(20.dp))
-//            Text(text = "Likes: ${0}", color = Color.White)
             Text(
                 text = "Likes: ${state.remoteAudioList?.get(audioIndex.intValue)?.likes}",
                 color = Color.White
