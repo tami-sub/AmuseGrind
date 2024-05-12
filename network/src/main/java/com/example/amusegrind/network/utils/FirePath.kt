@@ -22,5 +22,6 @@ object FirePath {
 
     fun getUserAudios(uid: String, audioType: AudioType) = "users/$uid/$audioType"
 
+    fun getChatsPath() = "chats"
     fun getMessagesPath() = "messages"
 }

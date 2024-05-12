@@ -1,6 +1,7 @@
 package com.example.amusegrind.network
 
 import com.example.amusegrind.network.data.AudiosRepo
+import com.example.amusegrind.network.data.ChatRepo
 import com.example.amusegrind.network.data.GoogleAuthService
 import com.example.amusegrind.network.data.UserRepo
 import com.google.firebase.auth.FirebaseAuth
@@ -27,4 +28,9 @@ interface NetworkFireBaseModule {
     fun bindUsersRepo(
         userRepoImpl: UserRepoImpl
     ): UserRepo
+
+    @Binds
+    fun bindChatRepo(
+        chatRepoImpl: ChatRepoImpl
+    ): ChatRepo
 }
